@@ -26,8 +26,8 @@ def packaging():
 @click.option('--ignore-file', '-i', default='./ignore-packaging', help='path to file containing ignore patterns.')
 def package(package_name=f"{Path.cwd().name}.zip", ignore_file='./ignore-packaging'):
     if not Path(ignore_file).exists():
-        click.echo(f"Unable to locate {ignore_file}!!"
-        sys.exit(1)
+        click.echo(f"Unable to locate {ignore_file}!! Using included file.")
+        ignore_file = './bin/ignore-packaging'
     matches = parse_gitignore(ignore_file, base_dir='.')
 
     staging = []

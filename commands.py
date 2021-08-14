@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import zipfile
 from pathlib import Path
@@ -22,8 +23,11 @@ def packaging():
 
 @packaging.command()
 @click.option('--package-name', '-n', default=f"{Path.cwd().name}.zip", help='Zip file name.')
-@click.option('--ignore-file', '-i', default='./bin/ignore-packaging', help='path to file containing ignore patterns.')
-def package(package_name=f"{Path.cwd().name}.zip", ignore_file='./bin/ignore-packaging'):
+@click.option('--ignore-file', '-i', default='./ignore-packaging', help='path to file containing ignore patterns.')
+def package(package_name=f"{Path.cwd().name}.zip", ignore_file='./ignore-packaging'):
+    if not Path(ignore_file).exists():
+        click.echo(f"Unable to locate {ignore_file}!!"
+        sys.exit(1)
     matches = parse_gitignore(ignore_file, base_dir='.')
 
     staging = []

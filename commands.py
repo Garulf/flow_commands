@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import uuid
 import zipfile
 from pathlib import Path
 
@@ -64,6 +65,22 @@ def update_version(new_version):
         f.write(json.dumps(plugin, indent=4))
     click.echo(f"Changed version to: {plugin['Version']}")
 
+def generate_uuid():
+    return str(uuid.uuid4()).replace('-', '').upper()
+
+@cli.command()
+def uuid():
+    click.echo(generate_uuid())
+
+@cli.command()
+def add_uuid():
+    with open('./plugin.json', 'r') as f:
+        plugin = json.load(f)
+    ID['Version'] = generate_uuid()
+    with open('./plugin.json', 'w') as f:
+        f.write(json.dumps(plugin, indent=4))
+    click.echo(f"Changed version to: {plugin['Version']}")
+
 if __name__ == "__main__":
-    cli = click.CommandCollection(sources=[packaging, versioning])
+    cli = click.CommandCollection(sources=[packaging, versioning, cli])
     cli()

@@ -22,8 +22,8 @@ def packaging():
 
 @packaging.command()
 @click.option('--package-name', '-n', default=f"{Path.cwd().name}.zip", help='Zip file name.')
-@click.option('--ignore-file', '-i', default='./bin/.ignore-packaging', help='path to file containing ignore patterns.')
-def package(package_name=f"{Path.cwd().name}.zip", ignore_file='./bin/.ignore-packaging'):
+@click.option('--ignore-file', '-i', default='./bin/ignore-packaging', help='path to file containing ignore patterns.')
+def package(package_name=f"{Path.cwd().name}.zip", ignore_file='./bin/ignore-packaging'):
     matches = parse_gitignore(ignore_file, base_dir='.')
 
     staging = []

@@ -4,6 +4,7 @@ import json
 import uuid
 import zipfile
 from pathlib import Path
+from subprocess import Popen
 
 import click
 from gitignore_parser import parse_gitignore
@@ -80,6 +81,22 @@ def add_uuid():
     with open('./plugin.json', 'w') as f:
         f.write(json.dumps(plugin, indent=4))
     click.echo(f"Changed version to: {plugin['Version']}")
+
+def run_cmd(cmd):
+    process = Popen(cmd)
+    process.wait()
+
+def clone_repo(repo, dir=None):
+    path = os.getcwd()
+    if dir:
+        path = os.path.join(path, *dir)
+    cmd = ["git", "clone", repo, path]
+
+    run_cmd(cmd)
+
+@cli.command()
+def update_workflows():
+    clone_repo("https://github.com/Garulf/flow_workflows", [".github", "workflows"])
 
 if __name__ == "__main__":
     cli = click.CommandCollection(sources=[packaging, versioning, cli])

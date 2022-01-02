@@ -7,4 +7,3 @@ assets/
 *.log
 *.zip
 .gitattributes
-utils/

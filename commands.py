@@ -10,6 +10,8 @@ import click
 from gitignore_parser import parse_gitignore
 
 DEFAULT_NAME = f"{Path('.').name}.zip"
+CDN = "https://cdn.jsdelivr.net/gh/{username}/{repo}@{branch}/{icon}"
+
 
 @click.group()
 def cli():
@@ -97,6 +99,26 @@ def clone_repo(repo, dir=None):
 @cli.command()
 def update_workflows():
     clone_repo("https://github.com/Garulf/flow_workflows", [".github", "workflows"])
+
+@cli.command()
+def generate_manifest_submission():
+    with open('./plugin.json', 'r') as f:
+        plugin = json.load(f)
+    username, repo = plugin['Website'].split('/')[3:5]
+    entry = {
+        "ID": plugin['ID'],
+        "Name": plugin['Name'],
+        "Description": plugin['Description'],
+        "Author": plugin['Author'],
+        "Version": plugin['Version'],
+        "Language": plugin['Language'],
+        "Website": plugin['Website'],
+        "UrlDownload": f"{plugin['Website']}/releases/download/{plugin['Version']}/{plugin['Name'].replace(' ', '-')}.zip",
+        "UrlSourceCode": f"{plugin['Website']}/tree/main",
+        "IcoPath": CDN.format(username=username, repo=repo, branch='main', icon=plugin['IcoPath'].replace('./', '')),
+    }
+    click.echo(entry)
+
 
 if __name__ == "__main__":
     cli = click.CommandCollection(sources=[packaging, versioning, cli])

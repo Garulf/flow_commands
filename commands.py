@@ -40,7 +40,7 @@ def package(package_name=f"{Path.cwd().name}.zip", ignore_file='./ignore-packagi
         if path.is_dir():
             path = str(path) + "/"
         if not spec.match_file(path):
-            staging.append(path)
+            staging.append(Path(path))
         
 
 

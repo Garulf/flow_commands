@@ -3,11 +3,11 @@ import sys
 import json
 import uuid
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePath
 from subprocess import Popen
 
 import click
-from gitignore_parser import parse_gitignore
+import pathspec
 
 DEFAULT_NAME = f"{Path('.').name}.zip"
 CDN = "https://cdn.jsdelivr.net/gh/{username}/{repo}@{branch}/{icon}"
@@ -32,13 +32,19 @@ def package(package_name=f"{Path.cwd().name}.zip", ignore_file='./ignore-packagi
     if not Path(ignore_file).exists():
         click.echo(f"Unable to locate {ignore_file}!! Using included file.")
         ignore_file = './bin/ignore-packaging'
-    matches = parse_gitignore(ignore_file, base_dir='.')
+    with open(ignore_file, 'r') as fh:
+        spec = pathspec.PathSpec.from_lines('gitwildmatch', fh)
+    print(list(spec.match_tree(Path.cwd())))
 
     staging = []
     for path in Path(".").glob("**/*"):
-        if matches(str(path.resolve())):
-            continue
-        staging.append(path)
+        print(path)
+        if path.is_dir():
+            path = str(path) + "/"
+        if not spec.match_file(path):
+            staging.append(path)
+        
+
 
     def zipdir(root, ziph):
         for path in staging:

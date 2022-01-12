@@ -34,11 +34,9 @@ def package(package_name=f"{Path.cwd().name}.zip", ignore_file='./ignore-packagi
         ignore_file = './bin/ignore-packaging'
     with open(ignore_file, 'r') as fh:
         spec = pathspec.PathSpec.from_lines('gitwildmatch', fh)
-    print(list(spec.match_tree(Path.cwd())))
 
     staging = []
     for path in Path(".").glob("**/*"):
-        print(path)
         if path.is_dir():
             path = str(path) + "/"
         if not spec.match_file(path):

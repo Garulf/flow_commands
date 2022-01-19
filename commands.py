@@ -117,7 +117,7 @@ def generate_manifest_submission():
         "Version": plugin['Version'],
         "Language": plugin['Language'],
         "Website": plugin['Website'],
-        "UrlDownload": f"{plugin['Website']}/releases/download/{plugin['Version']}/{plugin['Name'].replace(' ', '-')}.zip",
+        "UrlDownload": f"{plugin['Website']}/releases/download/v{plugin['Version']}/{plugin['Name'].replace(' ', '-')}.zip",
         "UrlSourceCode": f"{plugin['Website']}/tree/main",
         "IcoPath": CDN.format(username=username, repo=repo, branch='main', icon=plugin['IcoPath'].replace('./', '')),
     }

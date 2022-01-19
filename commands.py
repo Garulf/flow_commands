@@ -121,7 +121,7 @@ def generate_manifest_submission():
         "UrlSourceCode": f"{plugin['Website']}/tree/main",
         "IcoPath": CDN.format(username=username, repo=repo, branch='main', icon=plugin['IcoPath'].replace('./', '')),
     }
-    click.echo(entry)
+    click.echo(json.dumps(entry, indent=4))
 
 
 if __name__ == "__main__":
